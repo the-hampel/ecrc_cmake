@@ -410,16 +410,31 @@ if(BLAS_FOUND AND LAPACK_FOUND AND MPI_FOUND)
       # Then try the search libs
       foreach (IT ${SCALAPACK_SEARCH_LIBS})
 	if (NOT ${_LIBRARIES})
-	  check_scalapack_libraries(
-	    ${_LIBRARIES}
-	    BLAS
-	    ${SCALAPACK_mkl_SEARCH_SYMBOL}
-	    ""
-	    "${IT};mkl_blacs_intelmpi_lp64"
-	    "${_BLAS_LIBRARIES}"
-	    ""
-	    "${MPI_Fortran_LIBRARIES}"
-	    )
+    if (CMAKE_C_COMPILER_ID STREQUAL "GNU" OR
+        CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR
+        CMAKE_Fortran_COMPILER_ID STREQUAL "GNU")
+      check_scalapack_libraries(
+        ${_LIBRARIES}
+        BLAS
+        ${SCALAPACK_mkl_SEARCH_SYMBOL}
+        ""
+        "${IT};mkl_blacs_openmpi_lp64"
+        "${_BLAS_LIBRARIES}"
+        ""
+        "${MPI_Fortran_LIBRARIES}"
+        )
+    else()
+      check_scalapack_libraries(
+        ${_LIBRARIES}
+        BLAS
+        ${SCALAPACK_mkl_SEARCH_SYMBOL}
+        ""
+        "${IT};mkl_blacs_intelmpi_lp64"
+        "${_BLAS_LIBRARIES}"
+        ""
+        "${MPI_Fortran_LIBRARIES}"
+        )
+    endif()
 	endif ()
       endforeach ()
     endif ()
